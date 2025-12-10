@@ -32,7 +32,14 @@
         name: nginx
         source: pull
 
-    
+    - name: Run Nginx Container
+      community.docker.docker_container:
+        name:  web_nginx
+        image: nginx
+        state: started
+        restart_policy: always
+        published_ports:
+          - "8080:80"
 
 
 
