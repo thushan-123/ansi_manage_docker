@@ -22,7 +22,18 @@
       dnf:
         name: python3-pip
         state: present
-        
+
+    - name: Install docker py sdk
+      pip:
+        name: docker
+
+    - name: Get nginx image
+      community.docker.docker_image:
+        name: nginx
+        source: pull
+
+    
+
 
 
 
