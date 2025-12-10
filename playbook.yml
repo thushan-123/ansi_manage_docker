@@ -6,4 +6,8 @@
   tasks:
 
     - name: Install packages
-
+      dnf: 
+        name:
+          - dnf-pluigns-core
+          - docker
+        state: present
