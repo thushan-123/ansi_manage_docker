@@ -11,3 +11,11 @@
           - dnf-pluigns-core
           - docker
         state: present
+
+    - name: Enable and start docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+        
