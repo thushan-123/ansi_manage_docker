@@ -1,0 +1,9 @@
+
+- name: Manage docker on fedora linux
+  hosts: fedora_servers
+  become: yes
+
+  tasks:
+
+    - name: Install packages
+
