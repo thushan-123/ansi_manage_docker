@@ -7,11 +7,13 @@
   tasks:
 
     - name: Install packages
-      dnf: 
+      dnf:
         name:
-          - dnf-pluigns-core
           - docker
+          - nginx
         state: present
+        use_backend: auto
+
 
     - name: Enable and start docker
       systemd:
@@ -32,6 +34,7 @@
       community.docker.docker_image:
         name: nginx
         source: pull
+
 
     - name: Run Nginx Container
       community.docker.docker_container:
