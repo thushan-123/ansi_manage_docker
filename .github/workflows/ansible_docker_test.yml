@@ -33,7 +33,7 @@ jobs:
 
     - name: Run  playbook 
       run: |
-        ansible-playbook playbook.yml -i localhost, --connection=local
+        ansible-playbook playbook.yml
 
     - name: Test container
       run: |
