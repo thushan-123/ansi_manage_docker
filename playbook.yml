@@ -1,44 +1,40 @@
-
-- name: Manage docker on fedora linux
-  hosts: localhost
-  connection: local
+---
+- name: Manage Docker on Fedora
+  hosts: fedora_servers
   become: yes
 
   tasks:
 
-    - name: Install packages
-      dnf:
-        name:
-          - docker
-          - nginx
-        state: present
-        use_backend: auto
+    - name: Install required packages
+    dnf:
+      name:
+        - dnf-plugins-core
+        - docker
+      state: present
 
-
-    - name: Enable and start docker
+    - name: Enable and start Docker
       systemd:
         name: docker
         state: started
         enabled: yes
-    
-    - name: Is pip install
+
+    - name: Ensure pip is installed
       dnf:
         name: python3-pip
         state: present
 
-    - name: Install docker py sdk
+    - name: Install Docker Python SDK
       pip:
         name: docker
 
-    - name: Get nginx image
+    - name: Pull Nginx image
       community.docker.docker_image:
         name: nginx
         source: pull
 
-
-    - name: Run Nginx Container
+    - name: Run nginx container
       community.docker.docker_container:
-        name:  web_nginx
+        name: my_nginx
         image: nginx
         state: started
         restart_policy: always
