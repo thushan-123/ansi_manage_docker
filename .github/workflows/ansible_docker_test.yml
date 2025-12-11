@@ -1,43 +1,35 @@
-name: CI Ansible Docker Playbook
+name: Test Ansible Fedora Playbook
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  test:
+  test-fedora:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Run Fedora container
+        run: |
+          docker run -d --name fedora \
+            -v ${{ github.workspace }}:/workspace \
+            fedora:40 sleep infinity
 
-    - name: Install ansible
-      run: |
-        sudo apt update
-        sudo apt install -y ansible python3-pip
-        pip3 install docker
-        ansible --version
+      - name: Install Ansible inside Fedora
+        run: |
+          docker exec fedora bash -c "
+            dnf install -y ansible dnf-plugins-core python3-dnf5
+          "
 
-    - name: Install ansi docker collection
-      run: |
-        ansible-galaxy collection install community.docker
+      - name: Run Ansible playbook inside Fedora
+        run: |
+          docker exec fedora bash -c "
+            cd /workspace &&
+            ansible-playbook playbook.yml -i inventory.ini
+          "
 
-    - name: Start docker 
-      run: |
-        sudo systemctl start docker
-        docker info
-
-    - name: Run  playbook 
-      run: |
-        ansible-playbook playbook.yml
-
-    - name: Test container
-      run: |
-        docker ps
 
 
 
