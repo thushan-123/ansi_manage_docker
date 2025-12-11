@@ -6,11 +6,11 @@
   tasks:
 
     - name: Install required packages
-    dnf:
-      name:
-        - dnf-plugins-core
-        - docker
-      state: present
+      dnf:
+        name:
+          - dnf-plugins-core
+          - docker
+        state: present
 
     - name: Enable and start Docker
       systemd:
