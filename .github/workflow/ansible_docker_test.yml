@@ -1,0 +1,44 @@
+- name: CI workflow for ansible docker playbook
+
+  on :
+    push: 
+      branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+
+  jobs:
+
+    test:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout Repo
+          uses: actions/checkout@v3
+
+        - name: Install ansible
+          run: |
+            sudo apt update
+            sudo apt install -y ansible python3-pip
+            pip3 install docker
+            ansible --version
+
+        - name: Install Ansi docker collection
+          run: |
+            ansible-galaxy collection install community.docker
+
+        - name: Start docker service
+          run: |
+            sudo systemctl start docker
+            docker info
+            docker images
+
+        - name: Playbook run
+          run: |
+            ansible-playbook playbook.yml -i localhost , --connection=local
+
+        - name: Show running container
+          run: |
+            docker ps
+
+
+
