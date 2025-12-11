@@ -1,0 +1,44 @@
+name: CI Ansible Docker Playbook
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install ansible
+      run: |
+        sudo apt update
+        sudo apt install -y ansible python3-pip
+        pip3 install docker
+        ansible --version
+
+    - name: Install ansi docker collection
+      run: |
+        ansible-galaxy collection install community.docker
+
+    - name: Start docker 
+      run: |
+        sudo systemctl start docker
+        docker info
+
+    - name: Run  playbook 
+      run: |
+        ansible-playbook playbook.yml -i localhost, --connection=local
+
+    - name: Test container
+      run: |
+        docker ps
+
+
+
+
