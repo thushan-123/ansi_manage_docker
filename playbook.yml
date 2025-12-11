@@ -22,7 +22,25 @@
       dnf:
         name: python3-pip
         state: present
-        
+
+    - name: Install docker py sdk
+      pip:
+        name: docker
+
+    - name: Get nginx image
+      community.docker.docker_image:
+        name: nginx
+        source: pull
+
+    - name: Run Nginx Container
+      community.docker.docker_container:
+        name:  web_nginx
+        image: nginx
+        state: started
+        restart_policy: always
+        published_ports:
+          - "8080:80"
+
 
 
 
